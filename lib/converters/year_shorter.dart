@@ -1,9 +1,10 @@
 List<String> yearShorter(String input) {
-  if (input.length != 4) return [];
+  final result = [input];
+  if (input.length != 4) return result;
 
   final number = int.tryParse(input);
-  if (number == null) return [];
-  if (number < 1000 || number > 3000) return [];
+  if (number == null) return result;
+  if (number < 1000 || number > 3000) return result;
 
-  return [input.substring(2)];
+  return [...result, input.substring(2)];
 }
