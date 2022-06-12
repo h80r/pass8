@@ -7,19 +7,17 @@ final _map = {
   't': '7',
 };
 
-bool isLeetable(String str) {
-  return _map.containsKey(str);
-}
+bool _isLeetable(String str) => _map.containsKey(str.toLowerCase());
 
 List<String> leetify(String input) => _leetify(input);
 
 List<String> _leetify(String input, [String currentString = '']) {
   if (input.isEmpty) return [currentString];
 
-  final char = input.substring(0, 1).toLowerCase();
+  final char = input.substring(0, 1);
   return [
     ..._leetify(input.substring(1), currentString + char),
-    if (isLeetable(char))
+    if (_isLeetable(char))
       ..._leetify(
         input.substring(1),
         currentString + _map[char]!,
