@@ -4,7 +4,7 @@ import 'package:pass8/modes.dart';
 
 final _rand = Random();
 
-List<String> capsify(String input, [Modes mode = Modes.shallow]) {
+List<String> casefy(String input, [Modes mode = Modes.shallow]) {
   switch (mode) {
     case Modes.shallow:
       return _shallow(input);

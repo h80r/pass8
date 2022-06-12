@@ -5,6 +5,17 @@ import 'package:pass8/modes.dart';
 final rand = Random();
 
 List<String> lengthInator(
+  List<String> input, [
+  int minLength = 8,
+  Modes mode = Modes.shallow,
+]) {
+  return input.expand((element) {
+    if (element.length >= minLength) return [element];
+    return _operate(element, minLength, mode);
+  }).toList();
+}
+
+List<String> _operate(
   String input, [
   int length = 8,
   Modes mode = Modes.shallow,

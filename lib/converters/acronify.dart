@@ -1,7 +1,7 @@
 bool _isYear(String str) =>
     str.length == 4 && str.split('').every((c) => int.tryParse(c) != null);
 
-List<String> shortify(String input) {
+List<String> acronify(String input) {
   if (_isYear(input)) return _year(input);
   return _shortify(input);
 }

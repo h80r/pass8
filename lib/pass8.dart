@@ -1,7 +1,8 @@
-import 'package:pass8/converters/capsify.dart';
+import 'package:pass8/converters/acronify.dart';
+import 'package:pass8/converters/casefy.dart';
 import 'package:pass8/converters/leetify.dart';
-import 'package:pass8/converters/shortify.dart';
 import 'package:pass8/generators/length_inator.dart';
+import 'package:pass8/generators/trim_inator.dart';
 import 'package:pass8/modes.dart';
 
 extension on List<String> {
@@ -12,37 +13,26 @@ extension on List<String> {
 
 List<String> generateWordbase(
   List<String> input, [
+  int length = 8,
   Modes mode = Modes.shallow,
 ]) {
-  print('Preparing wordbase...');
-  final words = input.map((e) => e.toLowerCase()).toSet().toList();
+  print('Preparando lista de palavras...');
+  final wordlist = input.map((e) => e.toLowerCase()).toSet().toList();
 
-  print('Shortifying words...');
-  final shortened = words.flatMap(shortify);
+  print('Transformando em acrônimos...');
+  final acronym = wordlist.flatMap(acronify);
 
-  print('Leetifying words...');
-  final leetyfied = shortened.flatMap((w) => leetify(w, mode));
+  print('Leetificando...');
+  final leetSpeak = acronym.flatMap((w) => leetify(w, mode));
 
-  print('Capsifying words...');
-  final capsyfied = leetyfied.flatMap((w) => capsify(w, mode));
+  print('Minificando...');
+  final randomCase = leetSpeak.flatMap((w) => casefy(w, mode));
 
-  return capsyfied;
-}
+  print('Retirando espaços...');
+  final trimmed = trimInator(randomCase);
 
-List<String> trimSpaces(List<String> input) {
-  return {
-    ...input,
-    ...input.map((w) => w.splitMapJoin(' ', onMatch: (m) => ''))
-  }.toList();
-}
+  print('Preenchendo senhas...');
+  final passwords = lengthInator(trimmed, length, mode);
 
-List<String> minimumLength(
-  List<String> input, [
-  int minLength = 8,
-  Modes mode = Modes.shallow,
-]) {
-  return input.expand((element) {
-    if (element.length >= minLength) return [element];
-    return lengthInator(element, minLength, mode);
-  }).toList();
+  return passwords;
 }
