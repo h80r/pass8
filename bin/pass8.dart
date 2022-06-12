@@ -1,10 +1,13 @@
-import 'package:pass8/converters/capsify.dart';
-import 'package:pass8/converters/leetify.dart';
-import 'package:pass8/converters/shortify.dart';
+import 'package:pass8/modes.dart';
+import 'package:pass8/pass8.dart';
 
 void main(List<String> arguments) {
-  print(capsify('Heitor'));
-  print(leetify('Heitor'));
-  print(shortify('2000'));
-  print(shortify('Segurança e Auditoria de Sistemas'));
+  final wordbase = generateWordbase([
+    'UFT',
+    'Segurança e Auditoria de Sistemas',
+    '2022',
+    'Ciência da Computação'
+  ], Modes.mixed);
+
+  print(wordbase);
 }
