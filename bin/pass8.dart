@@ -9,5 +9,7 @@ void main(List<String> arguments) {
     'Ciência da Computação'
   ], Modes.mixed);
 
-  print(wordbase);
+  final trimmed = trimSpaces(wordbase);
+
+  print(minimumLength(trimmed, 8, Modes.mixed));
 }
