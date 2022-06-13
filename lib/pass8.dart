@@ -1,3 +1,4 @@
+import 'package:interact/interact.dart';
 import 'package:pass8/converters/acronify.dart';
 import 'package:pass8/converters/casefy.dart';
 import 'package:pass8/converters/leetify.dart';
@@ -17,24 +18,60 @@ List<String> generateWordbase(
   int? passwordLength = 8,
   Modes mode = Modes.shallow,
 }) {
-  print('Preparando lista de palavras...');
+  final wordlistSpinner = Spinner(
+    icon: '📋',
+    rightPrompt: (done) => done
+        ? 'Lista de palavras padronizada!'
+        : 'Padronizando lista de palavras...',
+  ).interact();
   final wordlist = input.map((e) => e.toLowerCase()).toSet().toList();
+  wordlistSpinner.done();
 
-  print('Transformando em acrônimos...');
+  final acronymSpinner = Spinner(
+    icon: '🔠',
+    rightPrompt: (done) => done
+        ? 'Lista de acrônimos gerada!'
+        : 'Gerando acrônimos para a lista de palavras...',
+  ).interact();
   final acronym = wordlist.flatMap(acronify);
+  acronymSpinner.done();
 
-  print('Leetificando...');
+  final leetSpinner = Spinner(
+    icon: '🤖',
+    rightPrompt: (done) => done
+        ? 'Tradução para L44T SP34K concluída!'
+        : 'Traduzindo para L44T SP34K...',
+  ).interact();
   final leetSpeak = acronym.flatMap((w) => leetify(w, mode));
+  leetSpinner.done();
 
-  print('Minificando...');
+  final caseSpinner = Spinner(
+    icon: '🔤',
+    rightPrompt: (done) => done
+        ? 'Lista de palavras com case convertida!'
+        : 'Convertendo lista de palavras para case aleatório...',
+  ).interact();
   final randomCase = leetSpeak.flatMap((w) => casefy(w, mode));
+  caseSpinner.done();
 
-  print('Retirando espaços...');
+  final trimSpinner = Spinner(
+    icon: '🔪',
+    rightPrompt: (done) => done
+        ? 'Espaços devidamente removidos!'
+        : 'Removendo espaços entre as palavras...',
+  ).interact();
   final trimmed = trimInator(randomCase)..shuffle();
+  trimSpinner.done();
 
   if (passwordLength != null) {
-    print('Preenchendo senhas...');
+    final lengthSpinner = Spinner(
+      icon: '🏗',
+      rightPrompt: (done) => done
+          ? ' Lista de palavras com tamanho padronizado!'
+          : ' Preenchendo palavras curtas demais...',
+    ).interact();
     final passwords = lengthInator(trimmed, passwordLength, mode)..shuffle();
+    lengthSpinner.done();
     return {...trimmed, ...passwords}.toList()..shuffle();
   }
 
@@ -47,6 +84,12 @@ List<String> generatePasswords(
   int passwordCount = 3000,
   Modes fillingMode = Modes.shallow,
 }) {
+  final passwordSpinner = Spinner(
+    icon: '🗝',
+    rightPrompt: (done) =>
+        done ? ' Senhas geradas!' : ' Gerando permutações de senhas...',
+  ).interact();
+
   final result = {...wordbase.where((w) => w.length >= (passwordLength ?? 0))};
   final compounds = Compounds(wordbase);
 
@@ -61,5 +104,6 @@ List<String> generatePasswords(
     result.addAll(lengthInator([word], passwordLength!, fillingMode));
   }
 
+  passwordSpinner.done();
   return result.toList();
 }
