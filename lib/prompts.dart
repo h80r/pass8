@@ -39,15 +39,18 @@ Modes requestMode() {
   return Modes.values[mode];
 }
 
-int requestPasswordLength() {
+int? requestPasswordLength() {
   final number = Input(
     prompt: 'Digite o número de caracteres mínimo que'
-        ' você deseja para suas senhas:',
+        ' você deseja para suas senhas (-1 para ignorar mínimo):',
     defaultValue: '8',
     validator: (value) {
       final parsed = int.tryParse(value);
       if (parsed == null) {
         throw ValidationError('Número inválido');
+      }
+      if (parsed == -1) {
+        return true;
       }
       if (parsed < 1) {
         throw ValidationError('É necessário um número maior ou igual a 1');
@@ -56,7 +59,11 @@ int requestPasswordLength() {
     },
   ).interact();
 
-  return int.parse(number);
+  final parsed = int.parse(number);
+  if (parsed == -1) {
+    return null;
+  }
+  return parsed;
 }
 
 int requestPasswordCount() {
