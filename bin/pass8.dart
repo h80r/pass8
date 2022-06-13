@@ -1,24 +1,24 @@
-import 'package:pass8/modes.dart';
+import 'package:pass8/files.dart';
 import 'package:pass8/pass8.dart';
+import 'package:pass8/prompts.dart';
 
 void main(List<String> arguments) {
-  final wordbase = generateWordbase([
-    'UFT',
-    'Segurança e Auditoria de Sistemas',
-    '2022',
-    'Ciência da Computação'
-  ], passwordLength: 8, mode: Modes.mixed);
-
-  print(wordbase);
-  print(wordbase.length);
-
-  final passwords = generatePasswords(
-    wordbase,
-    passwordLength: 8,
-    passwordCount: 3000,
-    fillingMode: Modes.mixed,
+  final wordlist = openWordlist();
+  final passwordLength = requestPasswordLength();
+  final executionMode = requestMode();
+  final wordbase = generateWordbase(
+    wordlist,
+    passwordLength: passwordLength,
+    mode: executionMode,
   );
 
-  print(passwords);
-  print(passwords.length);
+  final passwordCount = requestPasswordCount();
+  final passwords = generatePasswords(
+    wordbase,
+    passwordLength: passwordLength,
+    passwordCount: passwordCount,
+    fillingMode: executionMode,
+  );
+
+  saveWordlist(passwords);
 }
